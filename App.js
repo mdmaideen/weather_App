@@ -1,0 +1,63 @@
+import React, { useState } from 'react';
+import Axios from 'axios';
+import './App.css';
+
+
+const KEY = '8bad41c4c500737216e4b0ddf5092cce';
+
+
+function App() {
+
+  const  [city,setCity]= useState("");
+  const  [data,setData]=useState();
+
+  const fetchdata =async () => {
+    try{
+      const response = await Axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${KEY}`);
+      setData(response.data);
+    }
+    catch(err){
+      alert('Please Enter The City Name Correctly');
+    }
+  }
+  return (
+    <div className="App">
+      <h1 className ="title">Weather App</h1>
+      <div className='input-container'>
+        <input
+        type='text'
+        className='input'
+        value={city}
+        onChange={e=>setCity(e.target.value)}
+        placeholder='Enter the City Name'
+        />
+       <button className='btn' onClick={fetchdata}>Enter</button>
+      </div>
+      
+      <div>
+        {data && (
+       
+       <div className='container'>
+        <h1 className='city-name'>{data.name},{data.sys.country}</h1> 
+        <div className='weeather-info'>
+          <div className='temp'>{Math.round(data.main.temp)} C</div>
+          <div className='coordination'>
+            <div> Lat - {data.coord.lat}</div>
+            <div> Lon - {data.coord.lon}</div>
+          </div>
+        </div>
+        </div>
+        )
+
+
+        }
+      </div>
+  
+    </div>
+
+
+
+  );
+}
+
+export default App;
